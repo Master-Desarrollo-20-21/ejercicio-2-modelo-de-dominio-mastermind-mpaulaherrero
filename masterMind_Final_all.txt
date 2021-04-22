@@ -1,0 +1,172 @@
+@startuml
+
+title Mastermind - Modelo de Dominio
+
+class Mastermind
+class Player
+class Board
+class Turn
+
+class CreateCodeRol
+class GuessCodeRol
+
+class CreateSecretCodeAction
+class CreateCombinationCodeAction
+class GiveHintAction
+class GiveScoreAction
+class EarnPointsGoal
+class GuessSecretCodeGoal
+class HandleSecretCodeGoal
+
+class CodeRow
+class HintRow
+class BigHole
+class SmallHole
+class ScoreColumn
+class ScoreHole
+class Shield
+class BigCompartment
+class SmallCompartment
+
+class HintPeg
+class ScorePeg
+class CodePeg
+
+class SecretCode
+class CombinationCode
+class Hint
+class Score
+
+class Red
+class Blue
+class Green
+class Yellow
+class Pink
+class Brown
+class Black
+class White
+class BlackHint
+class WhiteHint
+class RedScore
+class BlueScore
+
+class Goal
+class Action
+class Peg
+class Hole
+class Row
+class Compartment
+class Rol
+
+Mastermind *--> "2" Player
+Mastermind *--> "*" Turn
+Mastermind *--> Board
+
+Turn *--> CreateCodeRol
+Turn *--> GuessCodeRol
+CreateCodeRol --> Player
+GuessCodeRol --> Player
+
+Board *--> "12" CodeRow
+Board *--> "12" HintRow
+Board *--> "2" ScoreColumn
+Board *--> Shield
+Board *--> BigCompartment
+Board *--> SmallCompartment
+
+CodeRow *--> "5" BigHole
+HintRow *--> "5" SmallHole
+ScoreColumn *--> "30" ScoreHole
+Shield *--> "5" BigHole
+
+SecretCode *--> "5" CodePeg
+CombinationCode *--> "5" CodePeg
+Hint *--> "5" HintPeg
+Score *--> "2" ScorePeg
+
+HintRow o--> "0.. 1" Hint
+CodeRow o--> "0.. 1" CombinationCode
+ScoreColumn o--> "0.. 1" Score
+Shield o--> "0.. 1" SecretCode: Hide
+
+BigHole o--> "0.. 1" CodePeg
+SmallHole o--> "0.. 1" HintPeg
+ScoreHole o--> "0.. 1" ScorePeg
+
+BigCompartment o--> "0.. 192" CodePeg: Storage
+SmallCompartment o--> "0.. 60" HintPeg: Storage
+
+Player *--> ScorePeg
+Player *--> ScoreColumn
+
+CreateCodeRol *--> "5" CodePeg
+CreateCodeRol *--> "60" HintPeg
+GuessCodeRol *--> "187" CodePeg
+
+CreateCodeRol *--> Shield
+CreateCodeRol *--> HintRow
+GuessCodeRol *--> CodeRow
+
+Player o--> EarnPointsGoal
+CreateCodeRol o--> HandleSecretCodeGoal
+GuessCodeRol o--> GuessSecretCodeGoal
+
+HandleSecretCodeGoal ..> CreateSecretCodeAction
+HandleSecretCodeGoal ..> GiveHintAction
+HandleSecretCodeGoal ..> GiveScoreAction
+GuessSecretCodeGoal ..> CreateCombinationCodeAction
+
+EarnPointsGoal ..> Score: have
+
+CreateSecretCodeAction ..> SecretCode: create
+GiveHintAction ..> Hint: create
+GiveScoreAction ..> Score: move
+CreateCombinationCodeAction ..> CombinationCode: create
+
+CreateSecretCodeAction ..> Shield: target
+GiveHintAction ..> HintRow: target
+GiveScoreAction ..> ScoreColumn: target
+CreateCombinationCodeAction ..> CodeRow: target
+
+CodePeg <|-- "24" Red
+CodePeg <|-- "24" Blue
+CodePeg <|-- "24" Green
+CodePeg <|-- "24" Yellow
+CodePeg <|-- "24" Pink
+CodePeg <|-- "24" Brown
+CodePeg <|-- "24" Black
+CodePeg <|-- "24" White
+
+HintPeg <|-- "30" BlackHint
+HintPeg <|-- "30" WhiteHint
+
+ScorePeg <|-- "2" RedScore
+ScorePeg <|-- "2" BlueScore
+
+Goal <|-- EarnPointsGoal
+Goal <|-- GuessSecretCodeGoal
+Goal <|-- HandleSecretCodeGoal
+
+Action <|-- CreateSecretCodeAction
+Action <|-- CreateCombinationCodeAction
+Action <|-- GiveHintAction
+Action <|-- GiveScoreAction
+
+Hole <|-- BigHole
+Hole <|-- SmallHole
+Hole <|-- ScoreHole
+
+Peg <|-- HintPeg
+Peg <|-- ScorePeg
+Peg <|-- CodePeg
+
+Row <|-- CodeRow
+Row <|-- HintRow
+
+Rol <|-- CreateCodeRol
+Rol <|-- GuessCodeRol
+
+Compartment <|-- BigCompartment
+Compartment <|-- SmallCompartment
+
+@enduml
